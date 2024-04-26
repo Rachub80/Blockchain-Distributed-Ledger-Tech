@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="https://unpkg.com/jquery@3.3.1/dist/jquery.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/web3@0.20.5/dist/web3.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="index.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.4.4/qrcode.min.js"></script>
+    <link rel="stylesheet" href="index.css">
+    
+
+    <script>
+        function openTab(evt, tabName) {
+            // Declare all varibles
+            var i, tabcontent, tablinks;
+
+            // Get all elements with class="tabcontent" and hide them
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+
+            // Get all elements with class="tablinks" and remove the class "active"
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+
+            // Show the current tab, and add an "active" class to the button that opened the tab
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.classList += "active";
+        }
+    </script>
+</head>
+
+<body>
+    <div id="productregistrationlist">
+        <h1>Product Registration PharmPlus</h1>
+        <hr /><br />
+        <table class="table"> <!--display the list of product registrations-->
+            <thead>
+                <tr>
+                    <th scope="col">Product ID</th>
+                    <th scope="col">Product Name</th>
+                    <th scope="col">Manufacture Date</th>
+                    <th scope="col">Expiry Date</th>
+                    <th scope="col">Compnay Name</th>
+                    <th scope="col">Title/Position</th>
+                    <th scope="col">Transaction Date</th>
+                </tr>
+            </thead>
+            <tbody id="productListResults">
+            </tbody>
+        </table>
+        <br />
+        <span id="message"></span>
+        <hr /> <!--display message-->
+    </div>
+
+    <!-- Navigation -->
+    <div class="tab">
+        <button class="tablinks" onclick="openTab(event, 'productregistration')">Register New Product</button>
+        <button class="tablinks" onclick="openTab(event, 'transferproduct')">Transfer Product</button>
+        <button class="tablinks" onclick="openTab(event, 'retrieveproduct')">Retrieve Product</button>
+        <button class="tablinks" onclick="openTab(event, 'getowner')">Get Owner</button>
+        <button class="tablinks" onclick="openTab(event, 'mintcoins')">Mint Coins</button>
+        <button class="tablinks" onclick="openTab(event, 'checkbalance')">Check Balance</button>
+        <button class="tablinks" onclick="openTab(event, 'sendcoins')">Transfter Coins</button>
+    </div>
+    <div id="productregistration" class="tabcontent">
+        <h2>Register New Product</h2>
+        <div class="input-group">
+            <h3>Product Id</h3>
+            <input type="number" id="newProductId" placeholder="Enter new Product Id">
+        </div>
+        <div class="input-group">
+            <h3>Product Name</h3>
+            <input type="text" id="newProductName" placeholder="Enter Product Name">
+        </div>
+        <div class="input-group">
+            <h3>Manufacture Date</h3>
+            <input type="date" id="newManu" placeholder="Enter Manufacture Date">
+        </div>
+        <div class="input-group">
+            <h3>Expiry Date</h3>
+            <input type="date" id="newEx" placeholder="Enter Expiry Date">
+        </div>
+        <div class="input-group">
+            <h3>Company Name</h3>
+            <input type="text" id="newCompanyName" placeholder="Enter Company Name">
+        </div>
+        <div class="input-group">
+            <h3>Position / Title</h3>
+            <input type="text" id="newtitle" placeholder="Enter Expiry Date">
+        </div>
+        <div class="input-group">
+            <h3>Transaction Date</h3>
+            <input type="date" id="newtrans" />
+        </div>
+        <div class="input-group">
+            <h3>Wallet Address</h3>
+            <input type="text" id="newAddress" placeholder="Enter owner's wallet adddress" />
+        </div>
+        <div class="input-group">
+            <h3>Amount Payable</h3>
+            <input type="text" id="newAmount" placeholder="Enter amount Payable" />
+        </div>
+        <div class="input-group">
+            </br>
+            <button class="btn" id="button-register">Register</button>
+        </div>
+        <section class="qr_code_output"> </section>
+        <div class="input-group">
+            <button class="btn" id="button-rdownload">Download QR Code</button>
+        </div>
+    </div>
+
+
+    <div id="transferproduct" class="tabcontent">
+        <h2>Transfer Product</h2>
+        <div class="input-group">
+            <h3>Product Id</h3>
+            <input type="number" id="txfProductId" placeholder="Enter new Product Id">
+        </div>
+        <div class="input-group">
+            <h3>Product Name</h3>
+            <input type="text" id="txfProductName" placeholder="Enter Product Name">
+        </div>
+        <div class="input-group">
+            <h3>Manufacture Date</h3>
+            <input type="date" id="txfManu" placeholder="Enter Manufacture Date">
+        </div>
+        <div class="input-group">
+            <h3>Expiry Date</h3>
+            <input type="date" id="txfEx" placeholder="Enter Expiry Date">
+        </div>
+        <div class="input-group">
+            <h3>Company Name</h3>
+            <input type="text" id="txfCompanyName" placeholder="Enter Company Name">
+        </div>
+        <div class="input-group">
+            <h3>Position / Title</h3>
+            <input type="text" id="txftitle" placeholder="Enter Expiry Date">
+        </div>
+        <div class="input-group">
+            <h3>Transaction Date</h3>
+            <input type="date" id="txftrans" placeholder="Enter today's date" />
+        </div>
+        <div class="input-group">
+            <h3>Wallet Address</h3>
+            <input type="text" id="txfAddress" placeholder="Enter owner's wallet adddress" />
+        </div>
+        <div class="input-group">
+            <h3>Amount Payable</h3>
+            <input type="text" id="txfAmount" placeholder="Enter amount Payable" />
+        </div>
+        <div class="input-group">
+            </br>
+            <button class="btn" id="button-transfer">Transfer</button>
+        </div>
+        <section class="tqr_code_output"> </section>
+        <div class="input-group">
+            <button class="btn" id="button-tdownload">Download QR Code</button>
+        </div>
+    </div>
+
+    <div id="retrieveproduct" class="tabcontent">
+        <h2>Retrieve Product</h2>
+        <div class="input-group">
+            <h3>Product Id</h3>
+            <input type="number" id="reProductId" placeholder="Enter new Product Id">
+        </div>
+        <div class="input-group">
+            </br>
+            <button class="btn" id="button-retrieve">Retrieve</button>
+        </div>
+        <div id="retrieveaproduct">
+            <h3>Product Result</h3>
+            <hr /><br />
+            <table class="table"> <!--display the list of product registrations-->
+                <thead>
+                    <tr>
+                        <th scope="col">Product ID</th>
+                        <th scope="col">Product Name</th>
+                        <th scope="col">Manufacture Date</th>
+                        <th scope="col">Expiry Date</th>
+                        <th scope="col">Compnay Name</th>
+                        <th scope="col">Title/Position</th>
+                        <th scope="col">Transaction Date</th>
+                        <th scope="col">Delete</th>
+                    </tr>
+                </thead>
+                <tbody id="productResult">
+                </tbody>
+            </table>
+            <br />
+            <span id="rmessage"></span>
+            <hr />
+        </div>
+    </div>
+
+
+
+
+
+    <div id="mintcoins" class="tabcontent">
+        <h2>Mint Coins</h2>
+        <div class="input-group">
+            <h3>Receiver's Wallet Address</h3>
+            <input type="text" id="mintReceiverAddress" placeholder="Enter wallet adddress..." />
+        </div>
+        <div class="input-group">
+            <h3>Amount to Mint</h3>
+            <input type="number" id="mintAmount" placeholder="Enter amount to mint">
+        </div>
+        <div class="input-group">
+            <br />
+            <button class="btn" id="button-mintcoins">Mint Coins</button>
+        </div>
+        <br />
+        <span id="shownewbalance"></span>
+    </div>
+
+    <div id="sendcoins" class="tabcontent">
+        <h2>Transfer coins</h2>
+
+    </div>
+
+    <div id="checkbalance" class="tabcontent">
+        <h2>Check Wallet Balance</h2>
+        <div class="input-group">
+            <h3>Wallet Address</h3>
+            <input type="text" id="walletAddress" placeholder="Enter wallet adddress..." />
+        </div>
+        <div class="input-group">
+            <br />
+            <button class="btn" id="button-balance">Check Balance</button>
+        </div>
+        <br />
+        <span id="showbalance"></span>
+    </div>
+
+
+
+
+
+
+
+    <script>
+        document.getElementById('button-register').addEventListener('click', function () {
+            var productId = document.getElementById('newProductId').value;
+            var productName = document.getElementById('newProductName').value;
+            var manufactureDate = document.getElementById('newManu').value;
+            var expiryDate = document.getElementById('newEx').value;
+            var companyName = document.getElementById('newCompanyName').value;
+            var title = document.getElementById('newtitle').value;
+            var transactionDate = document.getElementById('newtrans').value;
+            var walletAddress = document.getElementById('newAddress').value;
+            var amountPayable = document.getElementById('newAmount').value;
+
+
+            var qrText = `Product Id: ${productId}\nProduct Name: ${productName}\nManufacture Date: ${manufactureDate}\nExpiry Date: ${expiryDate}\nCompany Name: ${companyName}\nPosition / Title: ${title}\nTransaction Date: ${transactionDate}\nWallet Address: ${walletAddress}\nAmount Payable: ${amountPayable}`;
+
+            var qrCodeOutput = document.querySelector('.qr_code_output');
+
+            //qrCodeOutput.innerHTML = ''; // Clear previous QR code
+
+            new QRCode(qrCodeOutput, {
+                text: qrText,
+                width: 380,
+                height: 300
+            });
+            console.log(QRCode, qrCodeOutput);
+        });
+
+        // Add an event listener to the download button
+        document.getElementById('button-rdownload').addEventListener('click', function () {
+            // Get the QR code image
+            var qrCodeImage = document.querySelector('.qr_code_output img');
+            if (qrCodeImage) {
+                // Create a temporary anchor element
+                var downloadLink = document.createElement('a');
+                downloadLink.href = qrCodeImage.src;
+                downloadLink.download = 'qrcode.png'; // Set the filename for the downloaded image
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                document.body.removeChild(downloadLink);
+            } else {
+                alert('No QR code available to download.');
+            }
+        });
+
+
+        document.getElementById('button-transfer').addEventListener('click', function () {
+            var txfProductId = document.getElementById('txfProductId').value;
+            var txfProductName = document.getElementById('txfProductName').value;
+            var txfManu = document.getElementById('txfManu').value;
+            var txfEx = document.getElementById('txfEx').value;
+            var txfCompanyName = document.getElementById('txfCompanyName').value;
+            var txftitle = document.getElementById('txftitle').value;
+            var txftrans = document.getElementById('txftrans').value;
+            var txfAddress = document.getElementById('txfAddress').value;
+            var txfAmount = document.getElementById('txfAmount').value;
+
+            var qrText = `Product Id: ${txfProductId}\nProduct Name: ${txfProductName}\nManufacture Date: ${txfManu}\nExpiry Date: ${txfEx}\nCompany Name: ${txfCompanyName}\nPosition / Title: ${txftitle}\nTransaction Date: ${txftrans}\nWallet Address: ${txfAddress}\nAmount Payable: ${txfAmount}`;
+
+            var qrCodeOutput = document.querySelector('.tqr_code_output');
+
+            //qrCodeOutput.innerHTML = ''; // Clear previous QR code
+
+            new QRCode(qrCodeOutput, {
+                text: qrText,
+                width: 380,
+                height: 300
+            });
+            console.log(QRCode, qrCodeOutput);
+        });
+
+        document.getElementById('button-tdownload').addEventListener('click', function () {
+            // Get the QR code image
+            var qrCodeImage = document.querySelector('.tqr_code_output img');
+            if (qrCodeImage) {
+                // Create a temporary anchor element
+                var downloadLink = document.createElement('a');
+                downloadLink.href = qrCodeImage.src;
+                downloadLink.download = 'qrcode.png'; // Set the filename for the downloaded image
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                document.body.removeChild(downloadLink);
+            } else {
+                alert('No QR code available to download.');
+            }
+        });
+
+    </script>
+</body>
+
+</html>

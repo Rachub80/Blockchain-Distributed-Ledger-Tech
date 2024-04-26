@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Qr code generator</title>
+        <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+        
+    </head>
+    <body onload="generateQr()">
+        
+        <div id="imgBox">
+            <img src="" id="qrImage">
+        </div>
+        <script>
+            let imgBox = document.getElementById("imgBox");
+            let qrImage = document.getElementById("qrImage");
+            
+
+            function generateQr(){
+                const url = window.location.href;
+                const urlObj = new URL(url);
+                console.log(url);
+                const productId = urlObj.searchParams.get('productId');
+                
+                console.log(productId);
+                
+                qrImage.src = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" + productId;
+                console.log("after" + productId);
+            }
+        </script>
+    </body>
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <script type="text/javascript" src="https://unpkg.com/jquery@3.3.1/dist/jquery.js"></script>
+  <script type="text/javascript" src="https://unpkg.com/web3@0.20.5/dist/web3.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+
+  <script src="index.js"></script>
+  <link rel="stylesheet" href="impt.css">
+  <link rel="stylesheet" href="index.css">
+  <style>
+    #productregistration {
+      text-align: center;
+    }
+
+    .tab-pane h2 {
+      text-align: center;
+    }
+  </style>
+  <script>
+    function openTab(evt, tabName) {
+      // Declare all varibles
+      var i, tabcontent, tablinks;
+
+      // Get all elements with class="tabcontent" and hide them
+      tabcontent = document.getElementsByClassName("tabcontent");
+      for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+      }
+
+      // Get all elements with class="tablinks" and remove the class "active"
+      tablinks = document.getElementsByClassName("tablinks");
+      for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+      }
+
+      // Show the current tab, and add an "active" class to the button that opened the tab
+      document.getElementById(tabName).style.display = "block";
+      evt.currentTarget.classList += "active";
+    }
+  </script>
+</head>
+
+<body>
+  <nav class="navbar navbar-fixed-top" style="background-color: white;">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="transactions.html">
+          <img class="card-img-top" src="images/PharmaTracklogo.png" alt="Manufacturer" class="avatar"
+            style="width: auto; height: 180%;">
+        </a>
+      </div>
+      <ul class="nav navbar-nav justify-content-center">
+        <li><a href="transactions.html">Home</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Product</a></li>
+        <li><a href="#">Process</a></li>
+        <li><a href="#">Contact Us</a></li>
+        <li><a href="#">FAQ</a></li>
+      </ul>
+    </div>
+  </nav>
+  <div class="container" style="margin-top:50px">
+    <h1>PharmaTrack</h1>
+    <hr /><br />
+    <br />
+
+    <br /><br />
+
+    <ul class="nav nav-tabs topnav-centered">
+      <li class="active"><a data-toggle="tab" href="#productregistration">Home</a></li>
+      <li><a data-toggle="tab" href="#menu1">Menu 1</a></li>
+      <li><a data-toggle="tab" href="#menu2">Menu 2</a></li>
+      <li><a data-toggle="tab" href="#menu3">Menu 3</a></li>
+    </ul>
+
+    <div class="tab-content">
+      <div id="productregistration" class="tab-pane fade in active" style="align-items: center;">
+        <h2>Register New Product</h2>
+        <div class="input-group">
+          <h3>Product Id</h3>
+          <input type="number" id="newProductId" placeholder="Enter new Product Id">
+        </div>
+        <div class="input-group">
+          <h3>Product Name</h3>
+          <input type="text" id="newProductName" placeholder="Enter Product Name">
+        </div>
+        <div class="input-group">
+          <h3>Manufacture Date</h3>
+          <input type="date" id="newManu" placeholder="Enter Manufacture Date">
+        </div>
+        <div class="input-group">
+          <h3>Expiry Date</h3>
+          <input type="date" id="newEx" placeholder="Enter Expiry Date">
+        </div>
+        <div class="input-group">
+          <h3>Company Name</h3>
+          <input type="text" id="newCompanyName" placeholder="Enter Company Name">
+        </div>
+        <div class="input-group">
+          <h3>Position / Title</h3>
+          <input type="text" id="newtitle" placeholder="Enter Expiry Date">
+        </div>
+        <div class="input-group">
+          <h3>Transaction Date</h3>
+          <input type="date" id="newtrans" />
+        </div>
+        <div class="input-group">
+          <h3>Wallet Address</h3>
+          <input type="text" id="newAddress" placeholder="Enter owner's wallet adddress" />
+        </div>
+        <div class="input-group">
+          <h3>Amount Payable</h3>
+          <input type="text" id="newAmount" placeholder="Enter amount Payable" />
+        </div>
+        <div class="input-group">
+          </br>
+          <button class="btn" id="button-register">Register</button>
+        </div>
+        <section class="qr_code_output"> </section>
+        <div class="input-group">
+          <button class="btn" id="button-rdownload">Download QR Code</button>
+        </div>
+      </div>
+      <div id="menu1" class="tab-pane fade">
+        <h3>Menu 1</h3>
+        <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+        </p>
+      </div>
+      <div id="menu2" class="tab-pane fade">
+        <h3>Menu 2</h3>
+        <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem
+          aperiam.</p>
+      </div>
+      <div id="menu3" class="tab-pane fade">
+        <h3>Menu 3</h3>
+        <p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+      </div>
+    </div>
+  </div>
+
+
+
+  </div>
+
+
+
+
+
+</body>
+
+</html>

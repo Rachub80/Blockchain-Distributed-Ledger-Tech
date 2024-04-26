@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="https://unpkg.com/jquery@3.3.1/dist/jquery.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/web3@0.20.5/dist/web3.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,400,0,0" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="index.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.4.4/qrcode.min.js"></script>
+    
+    <link rel="stylesheet" href="index.css">
+    <script src="https://unpkg.com/html5-qrcode"></script>
+    <script>
+        function domReady(fn){
+          if (document.readyState ==="complete" || document.readyState ==="interactive"){
+            setTimeout(fn, 1)
+          }
+          else{
+            document.addEventListener("DOMContentLoaded", fn)
+          }
+        }
+
+        domReady(function(){
+          var myqr = document.getElementById('your-qr-result')
+          var lastResult, countResults = 0;
+
+          function onScanSuccess(decodeText, decodeResult){
+            if (decodeText !==lastResult){
+              ++countResults;
+              lastResult = decodeText;
+              console.log(decodeText);
+
+              that.getProduct(productId, function (error, product) {
+                if (error) {
+                    console.log(error)
+                } else {
+                    var id = product[0];
+                    var name = product[1];
+                    var mdate = formatUnixTimestamp(product[2]);
+                    var edate = formatUnixTimestamp(product[3]);
+                    var company = product[4];
+                    var title = product[5];
+                    var transDate = formatUnixTimestamp(product[6]);
+                    var productTemplate = "<tr><td>" + id + "</td><td>" + name + "</td><td>" + mdate + "</td><td>" + edate + "</td><td>" + company + "</td><td>" + title + "</td><td>" + transDate + "</td><td><button id='button-delete' data-product-id='" + id + "'>Delete</button></td></tr >"
+                    $("#productResult").append(productTemplate);
+                    $("#rmessage").text("Product " + productId + " retrieved");
+                    alert("Product " + productId + " retrieved");
+                }
+            });
+            }
+          }
+
+          var htmlscanner = new Html5QrcodeScanner(
+            "my-qr-reader", {fps:10, qrbox:250})
+
+          htmlscanner.render(onScanSuccess)
+        })
+     
+        function openTab(evt, tabName) {
+            // Declare all varibles
+            var i, tabcontent, tablinks;
+
+            // Get all elements with class="tabcontent" and hide them
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+
+            // Get all elements with class="tablinks" and remove the class "active"
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+
+            // Show the current tab, and add an "active" class to the button that opened the tab
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.classList += "active";
+        }
+    </script>
+</head>
+
+<body>
+    <ul style="padding: 0px;">
+        <li>
+            <a href="transactions.html">
+            <img class="" src="images/PharmaTracklogo.png" alt="Manufacturer" style="width: 150px;">
+            </a>
+        </li>
+        <li><a class="active" href="transactions.html" style="font-size: 16px;">Home</a></li>
+        <li><a href="#about" style="font-size: 16px;">About</a></li>
+        <li><a href="#product" style="font-size: 16px;">Product</a></li>
+        <li><a href="#process" style="font-size: 16px;">Process</a></li>
+        <li><a href="#contactus" style="font-size: 16px;">Contact Us</a></li>
+        <li><a href="#faq" style="font-size: 16px;">FAQ</a></li>
+      </ul>
+    <div id="text">
+        <div id="productregistrationlist">
+            <h1>PharmaTrack</h1>
+            <hr /><br />
+            <table class="table"> <!--display the list of product registrations-->
+                <thead>
+                    <tr>
+                        <th scope="col">Product ID</th>
+                        <th scope="col">Product Name</th>
+                        <th scope="col">Manufacture Date</th>
+                        <th scope="col">Expiry Date</th>
+                        <th scope="col">Compnay Name</th>
+                        <th scope="col">Title/Position</th>
+                        <th scope="col">Transaction Date</th>
+                    </tr>
+                </thead>
+                <tbody id="productListResults">
+                </tbody>
+            </table>
+            <br />
+            <strong><span id="message"></span></strong> 
+            <hr /> <!--display message-->
+        </div>
+    
+        <!-- Navigation -->
+        <div class="tab">
+            <button class="tablinks" onclick="openTab(event, 'productregistration')">Register New Product</button>
+            <button class="tablinks" onclick="openTab(event, 'transferproduct')">Transfer Product</button>
+            <button class="tablinks" onclick="openTab(event, 'retrieveproduct')">Search Product</button>
+            <!--<button class="tablinks" onclick="openTab(event, 'updateproduct')">Update Product</button>-->
+            <button class="tablinks" onclick="openTab(event, 'mintcoins')">Mint Coins</button>
+            <button class="tablinks" onclick="openTab(event, 'checkbalance')">Check Balance</button>
+            <!--<button class="tablinks" onclick="openTab(event, 'viewall')">View transactions</button>-->
+        </div>
+        <div id="productregistration" class="tabcontent">
+            <h2>Register New Product</h2>
+            <div class="input-group">
+                <h3>Product ID</h3>
+                <input type="number" id="newProductId" placeholder="Enter new Product Id">
+            </div>
+            <div class="input-group">
+                <h3>Product Name</h3>
+                <input type="text" id="newProductName" placeholder="Enter Product Name">
+            </div>
+            <div class="input-group">
+                <h3>Manufacture Date</h3>
+                <input type="date" id="newManu" placeholder="Enter Manufacture Date">
+            </div>
+            <div class="input-group">
+                <h3>Expiry Date</h3>
+                <input type="date" id="newEx" placeholder="Enter Expiry Date">
+            </div>
+            <div class="input-group">
+                <h3>Company Name</h3>
+                <input type="text" id="newCompanyName" placeholder="Enter Company Name">
+            </div>
+            <div class="input-group">
+                <h3>Position / Title</h3>
+                <input type="text" id="newtitle" placeholder="Enter Position / Title">
+            </div>
+            <div class="input-group">
+                <h3>Transaction Date</h3>
+                <input type="date" id="newtrans" placeholder="Enter Today's Date" />
+            </div>
+            <div class="input-group">
+                <h3>Wallet Address</h3>
+                <input type="text" id="newAddress" placeholder="Enter Owner's wallet adddress" />
+            </div>
+            <div class="input-group">
+                <h3>Amount Payable</h3>
+                <input type="text" id="newAmount" placeholder="Enter Amount Payable" />
+            </div>
+            <div class="input-group">
+                </br>
+                <button class="btn btn-green" id="button-register">Register</button>
+            </div>
+            <section class="qr_code_output"> </section>
+            </br>
+            <div class="input-group">
+                <button class="btn btn-download" id="button-rdownload"><i class="fa fa-download"></i>  Download QR Code</button>
+            </div>
+        </div>
+    
+    
+        <div id="transferproduct" class="tabcontent">
+            <h2>Transfer Product</h2>
+            <div class="input-group">
+                <h3>Product ID</h3>
+                <input type="number" id="txfProductId" placeholder="Enter a valid Product Id">
+            </div>
+            <div class="input-group">
+                <h3>Product Name</h3>
+                <input type="text" id="txfProductName" placeholder="Enter Product Name">
+            </div>
+            <div class="input-group">
+                <h3>Manufacture Date</h3>
+                <input type="date" id="txfManu" placeholder="Enter Manufacture Date">
+            </div>
+            <div class="input-group">
+                <h3>Expiry Date</h3>
+                <input type="date" id="txfEx" placeholder="Enter Expiry Date">
+            </div>
+            <div class="input-group">
+                <h3>Company Name</h3>
+                <input type="text" id="txfCompanyName" placeholder="Enter the other Company Name">
+            </div>
+            <div class="input-group">
+                <h3>Position / Title</h3>
+                <input type="text" id="txftitle" placeholder="Enter their Position / Title">
+            </div>
+            <div class="input-group">
+                <h3>Transaction Date</h3>
+                <input type="date" id="txftrans" placeholder="Enter Today's Date" />
+            </div>
+            <div class="input-group">
+                <h3>Wallet Address</h3>
+                <input type="text" id="txfAddress" placeholder="Enter Owner's wallet adddress" />
+            </div>
+            <div class="input-group">
+                <h3>Amount Payable</h3>
+                <input type="text" id="txfAmount" placeholder="Enter Amount Payable" />
+            </div>
+            <div class="input-group">
+                </br>
+                <button class="btn btn-yellow" id="button-transfer">Transfer</button>
+            </div>
+            <section class="tqr_code_output"> </section>
+            </br>
+            <div class="input-group">
+                <button class="btn btn-download" id="button-tdownload"><i class="fa fa-download"></i>  Download QR Code</button>
+            </div>
+        </div>
+    
+        <div id="retrieveproduct" class="tabcontent">
+            <h2>Search Product</h2>
+            <div class="input-group">
+                <h3>Product ID</h3>
+                <input type="number" id="reProductId" placeholder="Enter a valid Product Id"><i id="button-retrieve" class="fa fa-search" style="padding-left: 5px;"></i></span>
+                <!-- <button class="btn btn-retrieve" >Retrieve</button> -->
+            </div>
+
+            <div style="text-align: center;">
+                <div id="your-qr-result" style="margin: 0 auto;"></div>
+                <div id="my-qr-reader" style="width: 500px; margin: 20px auto;"></div>
+            </div>
+
+            <div id="retrieveaproduct">
+                <h3>Product Result</h3>
+                <hr /><br />
+                <table class="table"> <!--display the list of product registrations-->
+                    <thead>
+                        <tr>
+                            <th scope="col">Product ID</th>
+                            <th scope="col">Product Name</th>
+                            <th scope="col">Manufacture Date</th>
+                            <th scope="col">Expiry Date</th>
+                            <th scope="col">Compnay Name</th>
+                            <th scope="col">Title/Position</th>
+                            <th scope="col">Transaction Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productResult">
+                    </tbody>
+                </table>
+                <br />
+                <span id="rmessage"></span>
+                <hr />
+            </div>
+        </div>
+    
+        <div id="updateproduct" class="tabcontent">
+    
+        </div>
+    
+    
+    
+        <div id="mintcoins" class="tabcontent">
+            <h2>Mint Coins</h2>
+            <div class="input-group">
+                <h3>Receiver's Wallet Address</h3>
+                <input type="text" id="mintReceiverAddress" placeholder="Enter wallet adddress" />
+            </div>
+            <div class="input-group">
+                <h3>Amount to Mint</h3>
+                <input type="number" id="mintAmount" placeholder="Enter amount to mint">
+            </div>
+            <div class="input-group">
+                <br />
+                <button class="btn btn-green" id="button-mintcoins">Mint Coins</button>
+            </div>
+            <br />
+            <span id="shownewbalance"></span>
+        </div>
+    
+        <div id="sendcoins" class="tabcontent">
+            <h2>Transfer coins</h2>
+    
+        </div>
+    
+        <div id="checkbalance" class="tabcontent">
+            <h2>Check Wallet Balance</h2>
+            <div class="input-group">
+                <h3>Wallet Address</h3>
+                <input type="text" id="walletAddress" placeholder="Enter wallet adddress" />
+            </div>
+            <div class="input-group">
+                <br />
+                <button class="btn btn-green" id="button-balance">Check Balance</button>
+            </div>
+            <br />
+            <strong><span id="showbalance"></span></strong> 
+        </div>
+    
+    
+        <div id="viewall" class="tabcontent">
+            <h2>View all transactions</h2>
+            <div id="productregistrationlist2">
+                <table class="table"> <!--display the list of product registrations-->
+                    <thead>
+                        <tr>
+                            <th scope="col">Product ID</th>
+                            <th scope="col">Product Name</th>
+                            <th scope="col">Manufacture Date</th>
+                            <th scope="col">Expiry Date</th>
+                            <th scope="col">Compnay Name</th>
+                            <th scope="col">Title/Position</th>
+                            <th scope="col">Transaction Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productListResults2">
+                    </tbody>
+                </table>
+                <br />
+                <strong><span id="message2"></span></strong> 
+                <hr /> <!--display message-->
+            </div>
+            
+        </div>
+    </div>
+    
+
+
+
+
+    <script>
+        document.getElementById('button-register').addEventListener('click', function () {
+            var productId = document.getElementById('newProductId').value;
+            var productName = document.getElementById('newProductName').value;
+            var manufactureDate = document.getElementById('newManu').value;
+            var expiryDate = document.getElementById('newEx').value;
+            var companyName = document.getElementById('newCompanyName').value;
+            var title = document.getElementById('newtitle').value;
+            var transactionDate = document.getElementById('newtrans').value;
+            var walletAddress = document.getElementById('newAddress').value;
+            var amountPayable = document.getElementById('newAmount').value;
+
+
+            var qrText = `Product Id: ${productId}\nProduct Name: ${productName}\nManufacture Date: ${manufactureDate}\nExpiry Date: ${expiryDate}\nCompany Name: ${companyName}\nPosition / Title: ${title}\nTransaction Date: ${transactionDate}\nWallet Address: ${walletAddress}\nAmount Payable: ${amountPayable}`;
+
+            var qrCodeOutput = document.querySelector('.qr_code_output');
+
+            qrCodeOutput.innerHTML = ''; // Clear previous QR code
+
+            new QRCode(qrCodeOutput, {
+                text: qrText,
+                width: 380,
+                height: 300
+            });
+            console.log(QRCode, qrCodeOutput);
+        });
+
+        // Add an event listener to the download button
+        document.getElementById('button-rdownload').addEventListener('click', function () {
+            // Get the QR code image
+            var qrCodeImage = document.querySelector('.qr_code_output img');
+            if (qrCodeImage) {
+                // Create a temporary anchor element
+                var downloadLink = document.createElement('a');
+                downloadLink.href = qrCodeImage.src;
+                downloadLink.download = 'qrcode.png'; // Set the filename for the downloaded image
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                document.body.removeChild(downloadLink);
+            } else {
+                alert('No QR code available to download.');
+            }
+        });
+
+
+        document.getElementById('button-transfer').addEventListener('click', function () {
+            var txfProductId = document.getElementById('txfProductId').value;
+            var txfProductName = document.getElementById('txfProductName').value;
+            var txfManu = document.getElementById('txfManu').value;
+            var txfEx = document.getElementById('txfEx').value;
+            var txfCompanyName = document.getElementById('txfCompanyName').value;
+            var txftitle = document.getElementById('txftitle').value;
+            var txftrans = document.getElementById('txftrans').value;
+            var txfAddress = document.getElementById('txfAddress').value;
+            var txfAmount = document.getElementById('txfAmount').value;
+
+            var qrText = `Product Id: ${txfProductId}\nProduct Name: ${txfProductName}\nManufacture Date: ${txfManu}\nExpiry Date: ${txfEx}\nCompany Name: ${txfCompanyName}\nPosition / Title: ${txftitle}\nTransaction Date: ${txftrans}\nWallet Address: ${txfAddress}\nAmount Payable: ${txfAmount}`;
+
+            var qrCodeOutput = document.querySelector('.tqr_code_output');
+
+            qrCodeOutput.innerHTML = ''; // Clear previous QR code
+
+            new QRCode(qrCodeOutput, {
+                text: qrText,
+                width: 380,
+                height: 300
+            });
+            console.log(QRCode, qrCodeOutput);
+        });
+
+        document.getElementById('button-tdownload').addEventListener('click', function () {
+            // Get the QR code image
+            var qrCodeImage = document.querySelector('.tqr_code_output img');
+            if (qrCodeImage) {
+                // Create a temporary anchor element
+                var downloadLink = document.createElement('a');
+                downloadLink.href = qrCodeImage.src;
+                downloadLink.download = 'qrcode.png'; // Set the filename for the downloaded image
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                document.body.removeChild(downloadLink);
+            } else {
+                alert('No QR code available to download.');
+            }
+        });
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,54 @@
+body {
+    background-color: #FFFFFF;
+    color: black;
+    font: 16px;
+    font-family:'Times New Roman', Times, serif;
+    text-align: center;
+    overflow-y: scroll;
+    /* Add the ability to scroll */
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+body::-webkit-scrollbar {
+    display: none;
+}
+
+@font-face {
+    font-family: 'Allerta Stencil';
+    src: url('Allerta_Stencil/AllertaStencil-Regular.ttf') format('truetype'); /* Update the path to the font file */
+}
+
+h1{
+    font-family: 'Allerta Stencil', sans-serif;
+    color: #F9278E;
+}
+
+ul {
+    list-style-type: none;
+    margin: 10px;
+    padding: 0;
+    overflow: hidden;
+    background-color: white;
+}
+
+li {
+    float: left;
+    padding: 0;
+    margin: 0;
+    text-decoration: none;
+}
+
+li a {
+    display: block;
+    color: black;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+li:not(:first-child) a:hover {
+    background-color: lightgray;
+    text-decoration: none;
+}
+
+

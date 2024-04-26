@@ -1,0 +1,115 @@
+pragma solidity ^0.5.10;
+
+
+contract PharmaceuticalSupplyChainContract{
+    //Moddel a prouct
+    struct Product {
+        uint productId;
+        string productName;
+        uint256 manuDate;
+        uint256 exDate;
+        Owner owner;
+    }
+
+    // Model a owner
+    struct Owner {
+        string name;
+        string title;
+        uint256 transDate;
+        address walletAddress;
+    }
+    
+    // Read/write products
+    mapping(uint => Product) private productList;
+    uint public productCount;
+    
+
+    // Read/write balances
+    mapping(address => uint) public balances;
+
+    // Gets owner details
+    function getOwner (uint _productId) public view returns (uint productId, string memory name, string memory title, uint256 transDate, address walletAddress){
+        return (
+            productList[_productId].productId, 
+            productList[_productId].owner.name, 
+            productList[_productId].owner.title, 
+            productList[_productId].owner.transDate, 
+            productList[_productId].owner.walletAddress);
+    }
+
+    
+    // Gets product details
+    function getProduct(uint _productId) public view returns (uint productId, string memory productName, uint256 manuDate, uint256 exDate, string memory name, string memory title, uint256 transDate){
+
+        return (
+            productList[_productId].productId,
+            productList[_productId].productName,
+            productList[_productId].manuDate,
+            productList[_productId].exDate,
+            productList[_productId].owner.name,
+            productList[_productId].owner.title,
+            productList[_productId].owner.transDate
+        );
+    }
+
+    // add specified amount of coins into specified receiver's wallet address
+    function mintCoins(address receiver, uint amount) public {
+        require(amount > 0, "Amount must be greater than zero");
+        balances[receiver] += amount;
+    }
+    
+    // send specified amount of coins from sender to receiver
+    function sendCoins(address sender, address receiver, uint amount) public {
+        require(amount <= balances[sender], "insufficient balance.");
+        balances[sender] -= amount;
+        balances[receiver] += amount;
+    }
+
+    function registerNewProduct (string memory _productname, uint256 _manuDate, uint256 _exDate, string memory _name, string memory _title, uint256 _transDate, address _address, uint _amount) public {
+        // deduct balance from buyer's wallet
+        balances[_address] -= _amount;
+        
+        productCount ++;
+        PharmaceuticalSupplyChainContract.Owner memory newowner = Owner(_name, _title, _transDate, _address);
+        productList[productCount] = Product(productCount, _productname, _manuDate, _exDate, newowner);
+    }
+
+    // transfer product to new owner for a specified amount of coins
+    function transferProduct (uint _productId, string memory _productname, uint256 _manuDate, uint256 _exDate, string memory _name, string memory _title, uint256 _transDate, address _address, uint _amount) public {
+        address receiver = productList[_productId].owner.walletAddress;
+
+        // Ensure that manufacturing and expiry dates remain unchanged
+        require(_manuDate == productList[_productId].manuDate, "Manufacturing date cannot be changed during transfer");
+        require(_exDate == productList[_productId].exDate, "Expiry date cannot be changed during transfer");
+        sendCoins(_address, receiver, _amount);
+
+        // register buyer
+        PharmaceuticalSupplyChainContract.Owner memory newowner = Owner(_name, _title, _transDate, _address);
+        productList[_productId] = Product(_productId, _productname, _manuDate, _exDate, newowner); // create a new product & update the productList with new product
+    }
+
+    // update product details based on productId
+    function updateProduct(uint _productId, string memory _productName, uint256 _manuDate, uint256 _exDate) public {
+        require(_productId <= productCount && _productId > 0, "Invalid productId");
+        Product storage productToUpdate = productList[_productId];
+        productToUpdate.productName = _productName;
+        productToUpdate.manuDate = _manuDate;
+        productToUpdate.exDate = _exDate;
+    }
+
+    // delete product based on productId
+    function deleteProduct(uint _productId) public {
+        require(_productId <= productCount && _productId > 0, "Invalid productId");
+        delete productList[_productId];
+        productCount --;
+    }
+
+    constructor() public {
+        mintCoins(0x0688b9BE939eb91A1cdDb549FeBe8AD83b96D201, 1000000);
+        mintCoins(0xA0Ad2C1bc4DAB3d67D6e171E76d091704534dB9c, 1000000);
+
+        registerNewProduct("covid vaccine", 1642598400, 1893456000, "phizer", "Manufacture", 1642598400, 0x0688b9BE939eb91A1cdDb549FeBe8AD83b96D201, 1000);
+        registerNewProduct("rsc vaccine", 1642598400, 1893456000, "company name", "Supplier", 1893456000, 0xA0Ad2C1bc4DAB3d67D6e171E76d091704534dB9c, 1000); // Registers the next product to Owner 2
+    }
+    
+}
